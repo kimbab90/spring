@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.board.mapper.BoardMapper">
+
+	<select id="selectBoardAll" resultType="boardvo">
+		SELECT * FROM
+		tbl_board
+	</select>
+
+	<select id="selecBoardSearch" resultType="boardvo"
+		parameterType="boardsearchvo">
+		SELECT rownum id, b.*
+		FROM tbl_board b
+		<where>
+			<if test="title != null"> title = #{title} </if>
+			<if test="content != null"> AND content = #{content} </if>
+			<if test="writer != null">
+				AND upper(writer) like '%' || upper(#{writer}) ||
+				'%'
+			</if>
+			<if test="bnos != null">
+				AND bno IN
+				<foreach collection="bnos" item="id" open="("
+					close=")" separator=",">
+					#{id}
+				</foreach>
+			</if>
+		</where>
+		ORDER BY bno
+	</select>
+
+	<select id="selectBoardOne" parameterType="int"
+		resultType="boardvo">
+		SELECT * FROM tbl_board
+		WHERE bno = #{bno}
+	</select>
+
+	<insert id="insertBoard" parameterType="boardvo">
+		INSERT INTO tbl_board
+		(
+			bno,
+			title,
+			content,
+			writer)
+		VALUES
+		(
+			seq_board.nextval,
+			#{title},
+			#{content},
+			#{writer})
+	</insert>
+
+	<update id="updateBoard" parameterType="boardvo">
+		UPDATE tbl_board
+		SET
+			title = #{title},
+			content = #{content},
+			updatedate = SYSDATE
+		WHERE bno = #{bno}
+	</update>
+
+	<delete id="deleteBoard" parameterType="int">
+		DELETE FROM tbl_board
+		WHERE bno = #{bno}
+	</delete>
+</mapper>
