@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.web.mapper.EmpMapper">
+
+	<select id="selectEmpolyeeAll" resultType="employee">
+		SELECT * FROM
+		employees
+	</select>
+
+	<select id="selectEmployeeAllBySearch" resultType="employee"
+		parameterType="employeesearch">
+		SELECT rownum id, e.*
+		FROM employees e
+		<where>
+			<if test="departmentId != 0"> department_id = #{departmentId} </if>
+			<if test="employeeId != 0"> AND employee_id = #{employeeId} </if>
+			<if test="salary != 0">
+				AND salary <![CDATA[ < ]]>
+				#{salary}
+			</if>
+			<if test="firstName != null">
+				AND upper(first_name) like '%' || upper(#{firstName}) ||
+				'%'
+			</if>
+			<if test="employeeIds != null">
+				AND employee_id IN
+				<foreach collection="employeeIds" item="id" open="("
+					close=")" separator=",">
+					#{id}
+				</foreach>
+			</if>
+		</where>
+		ORDER BY first_name
+	</select>
+
+	<select id="selectEmpolyeeOne" parameterType="int"
+		resultType="employee">
+		SELECT * FROM employees
+		WHERE employee_id = #{employeeId}
+	</select>
+
+	<select id="selectEmpolyeeAllToMap" resultType="Map">
+		SELECT * FROM
+		employees
+	</select>
+
+	<select id="selectEmpolyeeCount" resultType="int">
+		SELECT COUNT(*) FROM
+		employees
+	</select>
+
+	<select id="selectEmpolyeeCountGroupByDept"
+		resultType="department">
+		SELECT e.department_id, d.department_name, COUNT(*)
+		employee_count
+		FROM employees e
+		LEFT JOIN departments d ON
+		e.department_id =
+		d.department_id
+		GROUP BY e.department_id,
+		d.department_name
+	</select>
+
+	<insert id="insertEmployee" parameterType="employee">
+		INSERT INTO employees
+		(
+		employee_id,
+		last_name,
+		email,
+		hire_date,
+		job_id)
+		VALUES
+		(
+		#{employeeId},
+		#{lastName},
+		#{email},
+		#{hireDate},
+		#{jobId})
+	</insert>
+
+	<update id="updateEmployee" parameterType="employee">
+		UPDATE employees
+		SET
+		first_name = #{firstName}
+		WHERE employee_id = #{employeeId}
+	</update>
+
+	<delete id="deleteEmployee" parameterType="int">
+		DELETE FROM employees
+		WHERE employee_id = #{employeeId}
+	</delete>
+</mapper>
