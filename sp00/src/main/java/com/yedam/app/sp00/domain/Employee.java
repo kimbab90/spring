@@ -1,4 +1,4 @@
-package com.yedam.web.model;
+package com.yedam.app.sp00.domain;
 
 import java.util.Date;
 

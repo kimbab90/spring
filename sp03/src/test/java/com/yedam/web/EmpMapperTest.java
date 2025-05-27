@@ -3,6 +3,8 @@ package com.yedam.web;
 import java.util.ArrayList;
 import java.util.List;
 
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +16,15 @@ import com.yedam.web.model.Employee;
 import com.yedam.web.model.EmployeeSearch;
 
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/spring/datasource-context.xml",
 		"classpath:/spring/mybatis-context.xml" })
 public class EmpMapperTest {
+	
+//	private static final Logger logger = LogManager.getLogger(EmpMapperTest.class);
 
 	@Setter(onMethod_ = { @Autowired })
 	private EmpMapper mapper;
@@ -26,19 +32,27 @@ public class EmpMapperTest {
 	@Test
 	public void test() {
 		
-		EmployeeSearch search = new EmployeeSearch();
-		search.setDepartmentId(50);
-		search.setSalary(3000);
+//		EmployeeSearch search = new EmployeeSearch();
+//		search.setDepartmentId(50);
+//		search.setSalary(3000);
+//		
+//		List<Integer> ids = new ArrayList<Integer>();
+//		ids.add(139);
+//		ids.add(140);
+//		
+//		search.setEmployeeIds(ids);
+//		
+//		List<Employee> list = mapper.selectEmployeeAllBySearch(search);
+//		
+//		list.forEach(item -> log.info(item.toString()));
 		
-		List<Integer> ids = new ArrayList<Integer>();
-		ids.add(139);
-		ids.add(140);
-		
-		search.setEmployeeIds(ids);
-		
-		List<Employee> list = mapper.selectEmployeeAllBySearch(search);
-		
-		list.forEach(item -> System.out.println(item.toString()));
+		List<Employee> list = mapper.selectEmployeeDept();
+		list.forEach(item -> {
+//			log.info(item.toString());
+			log.info(item.getFirstName() + " : " + item.getDepartment().getDepartmentName());
+		});
+	}
+}
 		
 //		List<Employee> list = mapper.selectEmpolyeeAll();
 //
@@ -97,7 +111,7 @@ public class EmpMapperTest {
 //
 //		System.out.println("DELETE RESULT : " + queryResult);
 
-	}
+//	}
 
 //	@Test
 //	public void test2() {
@@ -112,4 +126,4 @@ public class EmpMapperTest {
 //		
 //		System.out.println("Employee Count : " + count);
 //	}
-}
+//}

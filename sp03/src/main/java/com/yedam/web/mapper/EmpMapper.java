@@ -8,6 +8,8 @@ import com.yedam.web.model.Employee;
 import com.yedam.web.model.EmployeeSearch;
 
 public interface EmpMapper {
+	
+	public List<Employee> selectEmployeeDept();
 
 	public List<Employee> selectEmpolyeeAll();
 	

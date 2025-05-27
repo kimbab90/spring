@@ -61,5 +61,4 @@ build/
 !mvnw
 !mvnw.cmd
 
-.metadata/
-Servers/
+.metadata
