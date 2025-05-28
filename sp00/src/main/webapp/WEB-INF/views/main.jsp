@@ -14,5 +14,6 @@ ${ param.name }<br>
 ${ param.age }<br>
 ${ job }<br>
 ${ param.names }<br>
+${ msg }<br>
 </body>
 </html>

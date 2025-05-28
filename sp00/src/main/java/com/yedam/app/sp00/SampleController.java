@@ -2,6 +2,8 @@ package com.yedam.app.sp00;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,7 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.yedam.app.sp00.domain.EmpDepts;
 import com.yedam.app.sp00.domain.Employee;
 import com.yedam.app.sp00.domain.SampleDTO;
 
@@ -67,5 +72,36 @@ public class SampleController {
 //		System.out.println(employee);
 		employee.forEach(item -> System.out.println(item));
 		return "main";
+	}
+	
+	@PostMapping("/ex08")
+	public String ex08(@RequestBody EmpDepts empDepts) {
+//		System.out.println(employee);
+		 System.out.println(empDepts);
+		 empDepts.getDepartments().forEach(item -> System.out.println(item));
+		return "main";
+	}
+	
+	@PostMapping("/ex09")
+	@ResponseBody
+	public SampleDTO ex09(SampleDTO sample, @RequestBody SampleDTO sample2) {
+//		sample.setName("Nicole");
+		System.out.println(sample);
+		System.out.println(sample2);
+		return sample;
+	}
+	
+	@PostMapping("/ex10")
+	public ResponseEntity<SampleDTO> ex10(SampleDTO sample) {
+		System.out.println(sample);
+		return new ResponseEntity<SampleDTO>(sample, HttpStatusCode.valueOf(200));
+	}	
+	
+	@GetMapping("/ex11")
+	public String ex11(SampleDTO sample, RedirectAttributes rttr) {
+		System.out.println(sample);
+		rttr.addFlashAttribute("msg","Flash"); 
+		rttr.addAttribute("name", "Miyabi");
+		return "redirect:ex01";
 	}
 }
