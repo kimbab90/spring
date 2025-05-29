@@ -5,9 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.yedam.board.mapper.BoardMapper;
-import com.yedam.board.service.BoardSearchVO;
 import com.yedam.board.service.BoardService;
 import com.yedam.board.service.BoardVO;
+import com.yedam.board.service.Criteria;
+import com.yedam.common.PageDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,9 +25,17 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BoardVO> getBoardSearch(BoardSearchVO search) {
-		List<BoardVO> list = boardMapper.selecBoardSearch(search);
+	public List<BoardVO> getBoardSearch(Criteria criteria) {
+		
+		List<BoardVO> list = boardMapper.selecBoardSearch(criteria);
+//		List<BoardVO> list = boardMapper.selectBoardAll();
+		
 		return list;
+	}
+
+	@Override
+	public int getTotalCount(Criteria criteria) {
+		return boardMapper.getTotalCount(criteria);
 	}
 	
 	@Override
@@ -49,4 +58,5 @@ public class BoardServiceImpl implements BoardService {
 	public int deleteBoard(int bno) {
 		return boardMapper.deleteBoard(bno);
 	}
+
 }

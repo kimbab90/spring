@@ -2,21 +2,20 @@ package com.yedam.board.web;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.yedam.board.service.BoardSearchVO;
 import com.yedam.board.service.BoardService;
 import com.yedam.board.service.BoardVO;
+import com.yedam.board.service.Criteria;
+import com.yedam.board.service.ResultVO;
+import com.yedam.common.PageDTO;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,9 +47,14 @@ public class BoardController {
 	 * @return 목록페이지
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String getBoard(BoardSearchVO search, Model model) {
-		List<BoardVO> list = boardService.getBoardSearch(search);
+	public String getBoard(Criteria criteria, Model model) {
+
+		List<BoardVO> list = boardService.getBoardSearch(criteria);
 		model.addAttribute("list", list);
+
+		int total = boardService.getTotalCount(criteria);
+		model.addAttribute("pageMaker", new PageDTO(criteria, total));
+
 		return "board/list";
 	}
 
@@ -76,23 +80,37 @@ public class BoardController {
 	public String postBoard(BoardVO board, RedirectAttributes rttr) {
 
 		int result = 0;
+		int resultType = 0;
 
 		if (board.getBno() > 0) {
+			resultType = 1;
 			result = boardService.putBoard(board);
 		} else {
 			result = boardService.postBoard(board);
 		}
 
-		rttr.addAttribute("result", result);
+		rttr.addFlashAttribute("result", result);
+		rttr.addFlashAttribute("resultType", resultType);
+		rttr.addFlashAttribute("resultBno", board.getBno());
 
 		return "redirect:./list";
 	}
 
 	@RequestMapping(value = "/delete/{bno}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public int deleteBoard(@PathVariable(name = "bno") int bno) {
+	public ResultVO deleteBoard(@PathVariable(name = "bno") int bno) {
 
-		int result = boardService.deleteBoard(bno);
+		int queryResult = boardService.deleteBoard(bno);
+
+		ResultVO result = new ResultVO();
+
+		if (queryResult > 0) {
+			result.setSuccess(true);
+			result.setMessage("삭제 성공!");
+		} else {
+			result.setSuccess(false);
+			result.setMessage("삭제 실패!");
+		}
 
 		return result;
 	}

@@ -6,7 +6,9 @@ public interface BoardService {
 
 	public List<BoardVO> getBoardAll();
 	
-	public List<BoardVO> getBoardSearch(BoardSearchVO search);
+	public List<BoardVO> getBoardSearch(Criteria criteria);
+	
+	public int getTotalCount(Criteria criteria);
 
 	public BoardVO getBoardOne(int bno);
 	

@@ -2,31 +2,69 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.board.mapper.BoardMapper">
 
+	<sql id="criteria">
+		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
+			<foreach item='type' collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="type == 'T'.toString()">
+							title like '%'||#{keyword}||'%'
+						</when>
+						<when test="type == 'C'.toString()">
+							content like '%'||#{keyword}||'%'
+						</when>
+						<when test="type == 'W'.toString()">
+							writer like '%'||#{keyword}||'%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+
 	<select id="selectBoardAll" resultType="boardvo">
 		SELECT * FROM
-		tbl_board
+		(SELECT /*+INDEX_DESC (tbl_board SYS_C007337) */ ROWNUM
+		rn, B.*
+		FROM tbl_board B
+		WHERE ROWNUM <![CDATA[ <= ]]>
+		30
+		) WHERE RN <![CDATA[ > ]]>
+		20
 	</select>
 
 	<select id="selecBoardSearch" resultType="boardvo"
-		parameterType="boardsearchvo">
-		SELECT rownum id, b.*
-		FROM tbl_board b
-		<where>
-			<if test="title != null"> title = #{title} </if>
-			<if test="content != null"> AND content = #{content} </if>
-			<if test="writer != null">
-				AND upper(writer) like '%' || upper(#{writer}) ||
-				'%'
-			</if>
-			<if test="bnos != null">
-				AND bno IN
-				<foreach collection="bnos" item="id" open="(" close=")"
-					separator=",">
-					#{id}
-				</foreach>
-			</if>
-		</where>
-		ORDER BY bno
+		parameterType="criteria">
+		SELECT * FROM (
+		SELECT ROWNUM rn, B.* FROM (SELECT * FROM tbl_board B ORDER BY bno DESC) B
+		WHERE
+		<include refid="criteria"></include>
+		<![CDATA[ rownum <= #{pageNum} * #{amount}) where rn > (#{pageNum} -1) * #{amount} ]]>
+
+		<!-- <where> <trim prefix="(" suffix=")" prefixOverrides="OR"> <foreach 
+			item='type' collection="typeArr"> <trim prefix="OR"> <choose> <when test="type 
+			== 'T'.toString()"> title like '%' || #{keyword} || '%' </when> <when test="type 
+			== 'C'.toString()"> content like '%' || #{keyword} || '%' </when> <when test="type 
+			== 'W'.toString()"> writer like '%' || #{keyword} || '%' </when> </choose> 
+			</trim> </foreach> </trim> </where> -->
+
+		<!-- <where> <trim prefix="(" suffix=") AND " prefixOverrides="OR"> <foreach 
+			item='type' collection="typeArr"> <trim prefix="OR"> <choose> <when test="type 
+			== 'T'.toString()"> title like '%'||#{keyword}||'%' </when> <when test="type 
+			== 'C'.toString()"> content like '%'||#{keyword}||'%' </when> <when test="type 
+			== 'W'.toString()"> writer like '%'||#{keyword}||'%' </when> </choose> </trim> 
+			</foreach> </trim> </where> -->
+	</select>
+
+	<select id="getTotalCount" resultType="int"
+		parameterType="criteria">
+		select
+		COUNT (*)
+		from
+		tbl_board
+		WHERE
+		<include refid="criteria"></include>
+		bno > 0
 	</select>
 
 	<select id="selectBoardOne" parameterType="int"
@@ -36,6 +74,9 @@
 	</select>
 
 	<insert id="insertBoard" parameterType="boardvo">
+		<selectKey keyProperty="bno" order="BEFORE" resultType="int">
+			SELECT seq_board.nextval FROM dual
+		</selectKey>
 		INSERT INTO tbl_board
 		(
 		bno,
@@ -44,7 +85,7 @@
 		writer)
 		VALUES
 		(
-		seq_board.nextval,
+		#{bno},
 		#{title},
 		#{content},
 		#{writer})
@@ -53,10 +94,12 @@
 	<update id="updateBoard" parameterType="boardvo">
 		UPDATE tbl_board
 		SET
-		title = #{title},
+		title
+		= #{title},
 		content = #{content},
 		writer = #{writer},
-		updatedate = SYSDATE
+		updatedate =
+		SYSDATE
 		WHERE bno = #{bno}
 	</update>
 
