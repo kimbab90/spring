@@ -8,7 +8,6 @@ import com.yedam.board.mapper.BoardMapper;
 import com.yedam.board.service.BoardService;
 import com.yedam.board.service.BoardVO;
 import com.yedam.board.service.Criteria;
-import com.yedam.common.PageDTO;
 
 import lombok.RequiredArgsConstructor;
 
