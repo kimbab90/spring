@@ -45,26 +45,29 @@
 </div>
 
 <div class="row g-3 align-items-center my-2">
+	<input type="number" id="rnoInput" name="rno" class="form-control" hidden="true">
 	<div class="col-md-1">
 		<label for="reply" class="col-form-label">댓글</label>
 	</div>
 	<div class="col-md-4">
-		<input type="text" id="reply" name="reply" class="form-control">
+		<input type="text" id="replyInput" name="reply" class="form-control">
 	</div>
 
 	<div class="col-md-1">
 		<label for="replyer" class="col-form-label">작성자</label>
 	</div>
 	<div class="col-md-2">
-		<input type="text" id="replyer" name="replyer" class="form-control">
+		<input type="text" id="replyerInput" name="replyer"
+			class="form-control">
 	</div>
 	<div class="col-auto">
 		<button class="btn btn-primary text-white" id="registerReplyBtn">등록</button>
+		<button class="btn btn-secondary text-white" onclick="resetReplyForm()">초기화</button>
 	</div>
 </div>
 
 
-<table class="table table-striped text-center align-middle">
+<table class="table text-center align-middle">
 	<thead>
 		<tr>
 			<th>순번</th>
@@ -79,8 +82,7 @@
 	</tbody>
 </table>
 
-<nav aria-label="Page navigation example" id="replyPageNav">
-</nav>
+<nav aria-label="Page navigation example" id="replyPageNav"></nav>
 
 <div id="loadingOverlay"
 	class="position-fixed top-0 start-0 w-100 h-100 d-none bg-dark bg-opacity-50 d-flex justify-content-center align-items-center"

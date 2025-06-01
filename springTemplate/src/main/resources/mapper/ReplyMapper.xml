@@ -47,7 +47,7 @@
 				FROM tbl_reply r
 				JOIN tbl_board b
 				ON r.bno = b.bno
-        		WHERE r.bno = 160
+        		WHERE r.bno = #{bno}
 				ORDER BY rno DESC) rr 
        		 WHERE ROWNUM <![CDATA[ <= ]]> #{cri.pageNum} * #{cri.amount}) 
        	WHERE rn <![CDATA[ > ]]> (#{cri.pageNum} -1) * #{cri.amount}

@@ -18,7 +18,7 @@ http://www.springframework.org/schema/tx https://www.springframework.org/schema/
 		<property name="mapperLocations"
 			value="classpath:mapper/*.xml" />
 		<property name="typeAliasesPackage"
-			value="com.yedam.board.service" />
+			value="com.yedam.board.service, com.yedam.hr.service" />
 	</bean>
 
 	<mybatis-spring:scan
