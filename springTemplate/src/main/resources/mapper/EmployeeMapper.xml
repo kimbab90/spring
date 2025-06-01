@@ -2,4 +2,86 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.hr.mapper.EmployeeMapper">
 
+	<sql id="criteria">
+		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
+			<foreach item='type' collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="type == 'D'.toString()">
+							department_id like '%'||#{keyword}||'%'
+						</when>
+						<when test="type == 'L'.toString()">
+							last_name like '%'||#{keyword}||'%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+
+	<select id="selectEmployeeSearch" resultType="employeevo"
+		parameterType="criteria">
+		SELECT * FROM (
+		SELECT ROWNUM rn, E.* FROM (SELECT * FROM tbl_employees
+		ORDER BY bno DESC) E
+		WHERE
+		<include refid="criteria"></include>
+		<![CDATA[ ROWNUM <= #{pageNum} * #{amount}) WHERE rn > (#{pageNum} -1) * #{amount} ]]>
+	</select>
+
+	<select id="getTotalCount" resultType="int"
+		parameterType="criteria">
+		SELECT
+		COUNT (*)
+		FROM
+		tbl_employees
+		WHERE
+		<include refid="criteria"></include>
+		employee_id > 0
+	</select>
+
+	<select id="selectEmployee" resultType="employeevo"
+		parameterType="int">
+		SELECT * FROM tbl_employees
+		WHERE employee_id =
+		#{employeeId}
+	</select>
+
+	<insert id="insertEmployee" parameterType="employeevo">
+		<selectKey keyProperty="employeeId" order="BEFORE"
+			resultType="int">
+			SELECT seq_employees.nextval FROM DUAL;
+		</selectKey>
+		INSERT INTO tbl_employees
+		(
+		employee_id,
+		last_name,
+		email,
+		hire_date,
+		job_id,
+		salary,
+		department_id)
+		VALUES
+		(
+		#{employeeId},
+		#{lastName},
+		#{email},
+		#{hireDate},
+		#{jobId},
+		#{salary},
+		#{departmentId})
+	</insert>
+
+	<update id="updateEmployee" parameterType="employeevo">
+		UPDATE tbl_employees
+		SET
+		salary = #{salary}
+		WHERE employee_id = #{employeeId}
+	</update>
+
+	<delete id="deleteEmployee" parameterType="int">
+		DELETE FROM
+		tbl_employees
+		WHERE employee_id = #{employeeId}
+	</delete>
 </mapper>
