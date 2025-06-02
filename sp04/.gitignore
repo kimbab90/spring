@@ -1,0 +1,65 @@
+# Java 기본
+*.class
+*.jar
+*.war
+*.ear
+
+# 로그 파일
+*.log
+
+# 빌드 결과물
+/build/
+/target/
+
+# IDE 설정 (IntelliJ, Eclipse 등)
+.idea/
+*.iml
+*.ipr
+*.iws
+*.classpath
+*.project
+*.settings/
+
+# OS별 임시 파일
+.DS_Store
+Thumbs.db
+
+# 환경 설정
+*.env
+.env.*
+*.properties.local
+application-*.yml
+application-*.yaml
+application-*.properties
+
+# Lombok 설정 파일
+lombok.config
+
+# 테스트 리포트
+/test-output/
+
+# Node (프론트와 연동된 경우)
+node_modules/
+dist/
+npm-debug.log
+yarn-error.log
+
+# 기타 캐시
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# gradle
+.gradle/
+!gradle-wrapper.jar
+build/
+
+# maven
+.mvn/
+!mvnw
+!mvnw.cmd
+
+.metadata/
+Servers/

@@ -7,9 +7,6 @@
 			<foreach item='type' collection="typeArr">
 				<trim prefix="OR">
 					<choose>
-						<when test="type == 'D'.toString()">
-							department_id like '%'||#{keyword}||'%'
-						</when>
 						<when test="type == 'L'.toString()">
 							last_name like '%'||#{keyword}||'%'
 						</when>

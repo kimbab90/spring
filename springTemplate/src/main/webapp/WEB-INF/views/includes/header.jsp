@@ -28,8 +28,8 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 						<li class="nav-item"><a class="nav-link active"
-							aria-current="page" href="#">Home</a></li>
-						<li class="nav-item"><a class="nav-link" href="#">Link</a></li>
+							aria-current="page" href="/springTemplate/boards/list">Board</a></li>
+						<li class="nav-item"><a class="nav-link" href="/springTemplate/employees/list">Employee</a></li>
 						<li class="nav-item dropdown"><a
 							class="nav-link dropdown-toggle" href="#" role="button"
 							data-bs-toggle="dropdown" aria-expanded="false"> Dropdown </a>
@@ -51,3 +51,15 @@
 				</div>
 			</div>
 		</nav>
+		<script>
+			$(document).ready(function() {
+				$('.nav-link').on('click', function(e) {
+					if ($(this).hasClass('disabled'))
+						return;
+
+					$('.nav-link').removeClass('active');
+
+					$(this).addClass('active');
+				});
+			});
+		</script>
