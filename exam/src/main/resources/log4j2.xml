@@ -9,10 +9,6 @@
 
 	<Loggers>
 		<!-- INFO 로그들 -->
-		<Logger name="jdbc.connection" level="off" additivity="false">
-			<AppenderRef ref="Console" />
-		</Logger>
-
 		<Logger name="jdbc.sqlonly" level="off" additivity="false">
 			<AppenderRef ref="Console" />
 		</Logger>
@@ -34,14 +30,6 @@
 		<Logger name="jdbc.resultset" level="warn" additivity="false">
 			<AppenderRef ref="Console" />
 		</Logger>
-
-		<!-- DEBUG 로그들 -->
-		<Logger name="org.springframework.security" level="debug"
-			additivity="false">
-			<AppenderRef ref="Console" />
-		</Logger>
-
-
 		<Root level="info">
 			<AppenderRef ref="Console" />
 		</Root>

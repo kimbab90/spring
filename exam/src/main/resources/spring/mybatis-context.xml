@@ -18,7 +18,7 @@ http://www.springframework.org/schema/tx https://www.springframework.org/schema/
 		<property name="mapperLocations"
 			value="classpath:mapper/*.xml" />
 		<property name="typeAliasesPackage"
-			value="com.company.app.service, com.company.user.service" />
+			value="com.company.exam.service, com.company.book.service" />
 	</bean>
 
 	<mybatis-spring:scan
