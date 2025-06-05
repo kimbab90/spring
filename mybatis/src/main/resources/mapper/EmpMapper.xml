@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.EmpMapper">
+
+	<select id="selectEmpAll" resultType="empvo">
+		SELECT * FROM tbl_employees
+	</select>
+
+	<select id="selectEmpOne" resultType="empvo" parameterType="int">
+		SELECT * FROM tbl_employees
+		WHERE employee_id = #{employeeId}
+	</select>
+
+	<insert id="insertEmp" parameterType="empvo">
+		<selectKey keyProperty="employeeId" order="BEFORE" resultType="int">
+			SELECT MAX(employee_id) + 1 FROM tbl_employees
+		</selectKey>
+		INSERT INTO tbl_employees
+		(employee_id, last_name, job_id, hire_date, email, department_id, salary)
+		VALUES
+		(#{employeeId}, #{lastName}, #{jobId}, #{hireDate}, #{email}, #{departmentId}, #{salary})
+	</insert>
+	
+	<update id="updateEmp" parameterType="empvo">
+		UPDATE tbl_employees
+		SET
+			job_id = #{jobId},
+			email = #{email},
+			department_id = #{departmentId},
+			salary = #{salary}
+		WHERE employee_id = #{employeeId}
+	</update>
+
+	<delete id="deleteEmp" parameterType="int">
+		DELETE FROM tbl_employees
+		WHERE employee_id = #{employeeId}
+	</delete>
+</mapper>
